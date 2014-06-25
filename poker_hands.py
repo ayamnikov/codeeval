@@ -8,11 +8,9 @@ test_cases = [
     'TC 7H KH 4H JC 7D 9S 3H QS 7S'
 ]
 
-ranklist = '23456789TJQKA'
-
 def eval_hand(hand):
     ranks, suits = zip(*hand.split())
-    a, b, c, d, e = ranks = tuple(reversed(sorted(map(ranklist.index, ranks))))
+    a, b, c, d, e = ranks = tuple(reversed(sorted(map('23456789TJQKA'.index, ranks))))
     flush = len(set(suits)) == 1
     straight = len(set(ranks)) == 5 and a-e == 4
     if flush and straight: return 10, ranks
