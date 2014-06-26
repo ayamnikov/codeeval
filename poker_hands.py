@@ -9,23 +9,25 @@ test_cases = [
 ]
 
 def eval_hand(hand):
-    ranks, suits = zip(*hand.split())
-    a, b, c, d, e = ranks = tuple(reversed(sorted(map('23456789TJQKA'.index, ranks))))
-    flush = len(set(suits)) == 1
-    straight = len(set(ranks)) == 5 and a-e == 4
-    if flush and straight: return 10, ranks
-    if flush: return 9, ranks
-    if straight: return 8, ranks
-    if len(set(ranks)) == 2:
-        if a!=b or d!=e: return 7, ranks
-        else: return 6, ranks
-    if len(set(ranks)) == 3:
-        if a==c or b==d or c==e: return 5, ranks
-        else: return 4, ranks
-    if len(set(ranks)) == 4: return 3, ranks
-    return 2, ranks
-
-
+    r, s=zip(*hand.split())
+    a, b, c, d, e=r=tuple(reversed(sorted(map('23456789TJQKA'.index, r))))
+    k, l=lambda n: tuple(x for x in r if r.count(x)==n), len(set(r))
+    kk=lambda n, m: tuple(chain(k(n), k(m)))
+    f=len(set(s))==1
+    a5=l==5 and a==12 and b-e==3
+    st=l==5 and a-e==4
+    if f and st: return 11, r
+    if f and a5: return 10
+    if l==2 and k(4): return 9, kk(4, 1)
+    if l==2: return 8, kk(3, 2)
+    if f: return 7, r
+    if st: return 6, r
+    if a5: return 5
+    if l==3 and k(3): return 4, kk(3, 1)
+    if l==3: return 3, kk(2, 1)
+    if l==4: return 2, kk(2, 1)
+    return 1, r
+    
 for test in test_cases:
     a = eval_hand(test[:len(test)//2].strip())
     b = eval_hand(test[len(test)//2:].strip())
